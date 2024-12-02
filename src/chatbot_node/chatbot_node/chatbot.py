@@ -23,9 +23,7 @@ class ChatbotNode(Node):
         self.run_chatbot()
 
     def process_command(self, command):
-        """
-        Processa o comando do usuário e executa a ação correspondente.
-        """
+
         for intention, phrases in intentions.items():
             for phrase in phrases:
                 if re.search(phrase, command, re.IGNORECASE):
@@ -34,9 +32,7 @@ class ChatbotNode(Node):
         return "Comando não reconhecido. Por favor, tente novamente."
 
     def run_chatbot(self):
-        """
-        Inicia o chatbot para interação com o usuário.
-        """
+
         while rclpy.ok():
             command = input("Você: ")
             if command.lower() in ["sair", "exit", "quit"]:
