@@ -44,20 +44,12 @@ git clone https://github.com/seu-usuario/Chatbot-Regras.git
 cd Chatbot-Regras
 ```
 
-### **3. Instale as Dependências**
-Crie e ative um ambiente virtual Python (opcional, mas recomendado):
-```bash
-python3 -m venv chatbot_env
-source chatbot_env/bin/activate  # Linux/Mac
-chatbot_env\Scripts\activate     # Windows
-```
-
 Instale as dependências do projeto:
 ```bash
 pip install -r requirements.txt
 ```
 
-### **4. Compile o Workspace ROS**
+### **3. Compile o Workspace ROS**
 Certifique-se de estar no diretório do workspace e compile o pacote:
 ```bash
 cd ~/Chatbot-Regras
