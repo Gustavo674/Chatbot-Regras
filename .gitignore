@@ -1,0 +1,12 @@
+# Ignorar ambientes virtuais
+venv/
+chatbot_env/
+
+# Arquivos do ROS2
+build/
+install/
+log/
+
+# Outros arquivos gerados automaticamente
+*.pyc
+__pycache__/
