@@ -1,20 +1,16 @@
 import rclpy
 from rclpy.node import Node
-
 import re
 
-# Dicionários de intenções e ações
-intentions = {
-    "go_to_secretary": ["secretaria", "vá para a secretaria", "dirija-se à secretaria"],
-    "go_to_library": ["biblioteca", "me leve para a biblioteca", "vá para a biblioteca"],
-    "go_to_lab": ["laboratório", "vá para o laboratório", "dirija-se ao laboratório"],
+# Mapeamento de ações baseadas em locais
+actions = {
+    "secretaria": lambda: "Robô indo para a secretaria...",
+    "biblioteca": lambda: "Robô indo para a biblioteca...",
+    "laboratório": lambda: "Robô indo para o laboratório...",
 }
 
-actions = {
-    "go_to_secretary": lambda: "Robô indo para a secretaria...",
-    "go_to_library": lambda: "Robô indo para a biblioteca...",
-    "go_to_lab": lambda: "Robô indo para o laboratório...",
-}
+# Padrão regex para capturar a intenção e o local
+command_pattern = re.compile(r"(vá para|me leve para|dirija-se à|dirija-se ao)\s+(.*)", re.IGNORECASE)
 
 class ChatbotNode(Node):
     def __init__(self):
@@ -22,21 +18,29 @@ class ChatbotNode(Node):
         self.get_logger().info("Chatbot iniciado! Digite 'sair' para encerrar.")
         self.run_chatbot()
 
+    def clean_location(self, location):
+
+        # Filtra apenas palavras alfabéticas
+        words = re.findall(r"\b\w+\b", location)
+        if words:
+            return words[-1].lower()  # Retorna a última palavra relevante
+        return None
+
     def process_command(self, command):
-        """
-        Processa o comando do usuário e executa a ação correspondente.
-        """
-        for intention, phrases in intentions.items():
-            for phrase in phrases:
-                if re.search(phrase, command, re.IGNORECASE):
-                    response = actions[intention]()  # Executa a ação
-                    return f"Ação reconhecida: {response}"
+
+        match = command_pattern.search(command)  # Procura o padrão no comando
+        if match:
+            _, location = match.groups()  # Captura a intenção e o local
+            cleaned_location = self.clean_location(location)  # Limpa o local
+            if cleaned_location and cleaned_location in actions:
+                response = actions[cleaned_location]()  # Executa a ação associada ao local
+                return f"Ação reconhecida: {response}"
+            else:
+                return f"Local '{cleaned_location}' não reconhecido."
         return "Comando não reconhecido. Por favor, tente novamente."
 
     def run_chatbot(self):
-        """
-        Inicia o chatbot para interação com o usuário.
-        """
+
         while rclpy.ok():
             command = input("Você: ")
             if command.lower() in ["sair", "exit", "quit"]:
