@@ -19,7 +19,9 @@ class ChatbotNode(Node):
         self.run_chatbot()
 
     def clean_location(self, location):
-
+        """
+        Remove caracteres irrelevantes do local capturado.
+        """
         # Filtra apenas palavras alfabéticas
         words = re.findall(r"\b\w+\b", location)
         if words:
@@ -27,7 +29,9 @@ class ChatbotNode(Node):
         return None
 
     def process_command(self, command):
-
+        """
+        Processa o comando do usuário usando regex para capturar a intenção e o local.
+        """
         match = command_pattern.search(command)  # Procura o padrão no comando
         if match:
             _, location = match.groups()  # Captura a intenção e o local
@@ -40,7 +44,9 @@ class ChatbotNode(Node):
         return "Comando não reconhecido. Por favor, tente novamente."
 
     def run_chatbot(self):
-
+        """
+        Inicia o chatbot para interação com o usuário.
+        """
         while rclpy.ok():
             command = input("Você: ")
             if command.lower() in ["sair", "exit", "quit"]:
